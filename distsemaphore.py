@@ -37,13 +37,15 @@ class DistributedSemaphore(object):
 
     def acquire(self):
         c = self.c
-
         if self.acquired: return False
+
         retry = self.retry
 
         while(retry >= 0):
             retry -= 1
             val, stamp = c.gets(self.name)
+            if val is None:
+                return False
             if val <= 0: 
                 continue
 
@@ -58,7 +60,6 @@ class DistributedSemaphore(object):
 
     def release(self):
         c = self.c
-
         if not self.acquired: return False
 
         retry = self.retry
@@ -66,6 +67,9 @@ class DistributedSemaphore(object):
         while(retry >= 0):
             retry -= 1
             val, stamp = c.gets(self.name)
+            if val is None:
+                return False
+
             success = c.cas(self.name, val+1, stamp)
             if success:
                 self.acquired = False
