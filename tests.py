@@ -16,6 +16,7 @@ class DistributedSemaphoreTest(unittest.TestCase):
     def tearDown(self):
         del(self.c1)
         del(self.c2)
+        del(self.c3)
 
     def testLockedCounter(self):
         c1, c2 = self.c1, self.c2
