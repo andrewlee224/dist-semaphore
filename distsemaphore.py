@@ -73,3 +73,7 @@ class DistributedSemaphore(object):
             time.sleep(1)
 
         return False
+
+
+    def __del__(self):
+        self.release()
