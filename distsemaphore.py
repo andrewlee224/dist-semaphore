@@ -8,8 +8,23 @@ import pylibmc as plm
 import time
 
 class DistributedSemaphore(object):
-    
+    """
+    Create an object for accessing or creating and accessing
+    the semaphore. If 'total' is supplied in the constructor,
+    the semaphore which can be accessed by maximum 'total'
+    number of clients is created.
+    """
+
     def __init__(self, c, name, retry=10, total=None):
+        """
+        name - name of the semaphore, used as a key in memcache
+        c - instance of pylibmc.Client
+        retry - number of retries if acquiring or releasing
+        fails
+        total - limit of concurrent clients acquiring the
+        semaphore
+        """
+
         self.c = c
         self.name = name
         self.retry = retry
